@@ -19,6 +19,12 @@
 #include <string>
 #include <exception>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+// C4275: non dll-interface class '...' used as base for dll-interface class '...'
+#pragma warning(disable: 4275)
+#endif // _MSC_VER
+
 namespace eprosima {
 namespace fastcdr {
 namespace exception {
@@ -26,22 +32,22 @@ namespace exception {
  * @brief This abstract class is used to create exceptions.
  * @ingroup EXCEPTIONMODULE
  */
-class Exception : public std::exception
+class Cdr_DllAPI Exception : public std::exception
 {
 public:
 
     //! \brief Default destructor.
-    virtual Cdr_DllAPI ~Exception() noexcept;
+    virtual ~Exception() noexcept;
 
     //! \brief This function throws the object as exception.
-    virtual Cdr_DllAPI void raise() const = 0;
+    virtual void raise() const = 0;
 
     /*!
      * @brief This function returns the error message.
      *
      * @return The error message.
      */
-    virtual Cdr_DllAPI const char* what() const noexcept override;
+    virtual const char* what() const noexcept override;
 
 protected:
 
@@ -50,7 +56,7 @@ protected:
      *
      * @param message A error message. This message pointer is copied.
      */
-    Cdr_DllAPI Exception(
+    Exception(
             const char* const& message) noexcept;
 
     /*!
@@ -58,7 +64,7 @@ protected:
      *
      * @param ex Exception that will be copied.
      */
-    Cdr_DllAPI Exception(
+    Exception(
             const Exception& ex) noexcept;
 
 #if HAVE_CXX0X
@@ -67,7 +73,7 @@ protected:
      *
      * @param ex Exception that will be moved.
      */
-    Cdr_DllAPI Exception(
+    Exception(
             Exception&& ex) noexcept;
 #endif // if HAVE_CXX0X
 
@@ -76,7 +82,7 @@ protected:
      *
      * @param ex Exception that will be copied.
      */
-    Cdr_DllAPI Exception& operator =(
+    Exception& operator =(
             const Exception& ex) noexcept;
 
 #if HAVE_CXX0X
@@ -85,7 +91,7 @@ protected:
      *
      * @param ex Exception that will be moved.
      */
-    Cdr_DllAPI Exception& operator =(
+    Exception& operator =(
             Exception&&) noexcept;
 #endif // if HAVE_CXX0X
 
@@ -96,5 +102,9 @@ private:
 }         //namespace exception
 }     //namespace fastcdr
 } //namespace eprosima
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif // _MSC_VER
 
 #endif // _FASTCDR_EXCEPTIONS_EXCEPTION_H_
